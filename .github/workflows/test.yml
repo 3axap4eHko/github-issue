@@ -1,0 +1,25 @@
+name: Test
+
+on:
+  push:
+    branches: [develop]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Env
+        run: |
+          echo "TEST=123" >> $GITHUB_ENV
+
+      - name: Patch
+        run: |
+          echo $TEST
+          cat package.json | jq --arg test $TEST '. + { test: $test }'
+          cat package.json | jq --arg test $TEST '. + { test: $test }' > package.json
+          cat package.json
+
